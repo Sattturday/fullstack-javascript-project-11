@@ -16,7 +16,9 @@
         <form>
           <div class="mb-3">
             <label for="url" class="form-label">RSS ссылка</label>
-            <input type="text" id="url" class="form-control" placeholder="https://example.com/rss.xml" />
+            <input id="url-input" autofocus="" type="text" required="" name="url" aria-label="url"
+              class="form-control w-100" placeholder="ссылка RSS" autocomplete="off">
+            <div class="feedback invalid-feedback"></div>
           </div>
 
           <button type="submit" class="btn btn-primary w-100">
