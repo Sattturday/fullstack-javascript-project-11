@@ -14,3 +14,8 @@ make install
 ```sh
 make develop
 ```
+
+### RSS Reader
+
+Демо:
+https://fullstack-javascript-project-11-sage.vercel.app/
