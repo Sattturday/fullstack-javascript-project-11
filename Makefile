@@ -5,10 +5,10 @@ develop:
 	npm run dev
 
 lint:
-	npx eslint .
+	npx eslint src
 
 lint-fix:
-	npx eslint . --fix
+	npx eslint src --fix
 	
 build:
 	NODE_ENV=production npm run build
