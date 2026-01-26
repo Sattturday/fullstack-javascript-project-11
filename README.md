@@ -1,2 +1,14 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/Sattturday/fullstack-javascript-project-11/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Sattturday/fullstack-javascript-project-11/actions)
+
+## Setup
+
+```sh
+make install
+```
+
+## Run
+
+```sh
+make develop
+```
