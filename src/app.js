@@ -1,3 +1,4 @@
+import i18next from 'i18next'
 import initView from './view.js'
 import buildSchema from './validation.js'
 
@@ -15,7 +16,7 @@ export default () => {
     feedback: document.querySelector('.feedback'),
   }
 
-  const watchedState = initView(state, elements)
+  const watchedState = initView(state, elements, i18next)
 
   const validate = (url) => {
     const urls = state.feeds.map(feed => feed.url)

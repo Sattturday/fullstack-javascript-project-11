@@ -7,27 +7,39 @@
   <title>RSS Reader</title>
 </head>
 
-<body>
-  <div class="container py-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8 col-lg-6">
-        <h1 class="mb-4">RSS Reader</h1>
+<body class="d-flex flex-column min-vh-100">
+  <main class="flex-grow-1">
+    <section class="container-fluid bg-dark p-5">
+      <div class="row">
+        <div class="col-md-10 col-lg-8 mx-auto text-white">
+          <h1 class="display-3 mb-0">RSS агрегатор</h1>
+          <p class="lead">Начните читать RSS сегодня! Это легко, это красиво.</p>
 
-        <form>
-          <div class="mb-3">
-            <label for="url" class="form-label">RSS ссылка</label>
-            <input id="url-input" autofocus="" type="text" required="" name="url" aria-label="url"
-              class="form-control w-100" placeholder="ссылка RSS" autocomplete="off">
-            <div class="feedback invalid-feedback"></div>
-          </div>
+          <form class="rss-form text-body" novalidate>
+            <div class="row">
+              <div class="col">
+                <div class="form-floating">
+                  <input id="url-input" type="text" name="url" class="form-control w-100" placeholder="ссылка RSS"
+                    autocomplete="off" required />
+                  <label for="url-input">Ссылка RSS</label>
+                </div>
+              </div>
+              <div class="col-auto">
+                <button type="submit" class="h-100 btn btn-lg btn-primary px-sm-5">
+                  Добавить
+                </button>
+              </div>
+            </div>
+          </form>
 
-          <button type="submit" class="btn btn-primary w-100">
-            Добавить
-          </button>
-        </form>
+          <p class="mt-2 mb-0 text-secondary">
+            Пример: https://lorem-rss.hexlet.app/feed
+          </p>
+          <p class="feedback m-0 position-absolute small text-danger"></p>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <script type="module" src="/src/main.js"></script>
 </body>
