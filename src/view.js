@@ -4,7 +4,6 @@ export default (state, elements, i18n) =>
   onChange(state, (path) => {
     if (path === 'feeds') {
       renderFeeds(state.feeds, elements.feeds)
-      console.log('state.feeds: ', state.feeds)
     }
 
     if (path === 'posts') {
@@ -17,7 +16,6 @@ export default (state, elements, i18n) =>
   })
 
 const updateForm = (form, elements, i18n) => {
-  // Обработка ошибки
   elements.input.classList.toggle('is-invalid', Boolean(form.error))
   elements.feedback.classList.toggle('text-danger', Boolean(form.error))
   elements.feedback.classList.toggle('text-success', !form.error)
@@ -39,21 +37,23 @@ const updateForm = (form, elements, i18n) => {
     elements.feedback.textContent = ''
   }
 
-  // Блокировка кнопки при отправке
   elements.form.querySelector('button[type="submit"]').disabled = form.status === 'sending'
 }
 
 const renderFeeds = (feeds, container) => {
-  container.innerHTML = `
-    <div class="card border-0">
-      <div class="card-body">
-        <h2 class="card-title h4">Фиды</h2>
+  if (!container.querySelector('ul')) {
+    container.innerHTML = `
+      <div class="card border-0">
+        <div class="card-body">
+          <h2 class="card-title h4">Фиды</h2>
+        </div>
+        <ul class="list-group border-0 rounded-0"></ul>
       </div>
-      <ul class="list-group border-0 rounded-0"></ul>
-    </div>
-  `
+    `
+  }
 
   const ul = container.querySelector('ul')
+  ul.innerHTML = ''
 
   feeds.forEach((feed) => {
     const li = document.createElement('li')
@@ -69,16 +69,19 @@ const renderFeeds = (feeds, container) => {
 }
 
 const renderPosts = (posts, container) => {
-  container.innerHTML = `
-    <div class="card border-0">
-      <div class="card-body">
-        <h2 class="card-title h4">Посты</h2>
+  if (!container.querySelector('ul')) {
+    container.innerHTML = `
+      <div class="card border-0">
+        <div class="card-body">
+          <h2 class="card-title h4">Посты</h2>
+        </div>
+        <ul class="list-group border-0 rounded-0"></ul>
       </div>
-      <ul class="list-group border-0 rounded-0"></ul>
-    </div>
-  `
+    `
+  }
 
   const ul = container.querySelector('ul')
+  ul.innerHTML = ''
 
   posts.forEach((post) => {
     const li = document.createElement('li')

@@ -24,9 +24,6 @@ export default () =>
               success: 'RSS успешно загружен',
             },
           },
-          rss: {
-            noTitle: 'Без названия',
-          },
         },
       },
     },
