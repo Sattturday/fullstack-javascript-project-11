@@ -8,7 +8,7 @@ export default (state, elements, i18n) =>
     }
 
     if (path === 'posts' || path.startsWith('posts.')) {
-      renderPosts(state.posts, elements.posts)
+      renderPosts(state.posts, elements.posts, i18n)
     }
 
     if (path.startsWith('form.')) {
@@ -73,7 +73,7 @@ const renderFeeds = (feeds, container) => {
   })
 }
 
-const renderPosts = (posts, container) => {
+const renderPosts = (posts, container, i18n) => {
   if (!container.querySelector('ul')) {
     container.innerHTML = `
       <div class="card border-0">
@@ -104,7 +104,7 @@ const renderPosts = (posts, container) => {
     const button = document.createElement('button')
     button.type = 'button'
     button.className = 'btn btn-outline-primary btn-sm'
-    button.textContent = 'Просмотр'
+    button.textContent = i18n.t('preview')
     button.dataset.id = post.id
 
     li.append(link, button)

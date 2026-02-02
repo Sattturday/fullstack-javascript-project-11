@@ -24,6 +24,7 @@ export default () =>
               success: 'RSS успешно загружен',
             },
           },
+          preview: 'Просмотр',
         },
       },
     },
