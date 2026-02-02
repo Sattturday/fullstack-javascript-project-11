@@ -16,7 +16,7 @@ export default (state, elements, i18n) =>
     }
 
     if (path === 'ui.modalPostId') {
-      renderModal(state, i18n)
+      renderModal(state)
     }
   })
 
