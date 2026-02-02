@@ -10,7 +10,10 @@ export default () => {
       status: 'idle', // 'idle' | 'sending' | 'success' | 'error'
     },
     feeds: [], // { id, url, title, description }
-    posts: [], // { id, feedId, title, link, description }
+    posts: [], // { id, feedId, title, link, description, read }
+    ui: {
+      modalPostId: null,
+    },
   }
 
   const elements = {
@@ -22,6 +25,19 @@ export default () => {
   }
 
   const watchedState = initView(state, elements, i18next)
+
+  elements.posts.addEventListener('click', (e) => {
+    const { id } = e.target.dataset
+    if (!id) return
+
+    const post = watchedState.posts.find(p => p.id === id)
+    if (!post) return
+
+    post.read = true
+    if (e.target.tagName === 'BUTTON') {
+      watchedState.ui.modalPostId = id
+    }
+  })
 
   const validate = (url) => {
     const urls = state.feeds.map(feed => feed.url)
@@ -42,6 +58,7 @@ export default () => {
               ...post,
               id: crypto.randomUUID(),
               feedId: feed.id,
+              read: false,
             }))
 
             watchedState.posts.unshift(...normalized)
@@ -79,6 +96,7 @@ export default () => {
           ...post,
           id: crypto.randomUUID(),
           feedId,
+          read: false,
         }))
 
         watchedState.posts.unshift(...normalizedPosts)

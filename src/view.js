@@ -1,4 +1,5 @@
 import onChange from 'on-change'
+import { Modal } from 'bootstrap'
 
 export default (state, elements, i18n) =>
   onChange(state, (path) => {
@@ -6,12 +7,16 @@ export default (state, elements, i18n) =>
       renderFeeds(state.feeds, elements.feeds)
     }
 
-    if (path === 'posts') {
+    if (path === 'posts' || path.startsWith('posts.')) {
       renderPosts(state.posts, elements.posts)
     }
 
     if (path.startsWith('form.')) {
       updateForm(state.form, elements, i18n)
+    }
+
+    if (path === 'ui.modalPostId') {
+      renderModal(state, i18n)
     }
   })
 
@@ -94,17 +99,29 @@ const renderPosts = (posts, container) => {
     link.target = '_blank'
     link.rel = 'noopener noreferrer'
     link.dataset.id = post.id
-    link.classList.add('fw-bold')
+    link.classList.add(post.read ? 'fw-normal' : 'fw-bold')
 
     const button = document.createElement('button')
     button.type = 'button'
     button.className = 'btn btn-outline-primary btn-sm'
     button.textContent = 'Просмотр'
     button.dataset.id = post.id
-    button.dataset.bsToggle = 'modal'
-    button.dataset.bsTarget = '#modal'
 
     li.append(link, button)
     ul.append(li)
   })
+}
+
+const renderModal = (state) => {
+  const post = state.posts.find(p => p.id === state.ui.modalPostId)
+  if (!post) return
+
+  const modalEl = document.getElementById('modal')
+
+  modalEl.querySelector('.modal-title').textContent = post.title
+  modalEl.querySelector('.modal-body').textContent = post.description
+  modalEl.querySelector('.full-article').href = post.link
+
+  const modal = Modal.getOrCreateInstance(modalEl)
+  modal.show()
 }
