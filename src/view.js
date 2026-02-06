@@ -1,56 +1,75 @@
 import onChange from 'on-change'
 import { Modal } from 'bootstrap'
 
-export default (state, elements, i18n) =>
-  onChange(state, (path) => {
-    if (path === 'feeds') {
-      renderFeeds(state.feeds, elements.feeds)
+export default (state, elements, i18n) => {
+  const modalEl = document.getElementById('modal')
+  const modal = Modal.getOrCreateInstance(modalEl)
+
+  return onChange(state, (path) => {
+    if (path === 'rss.feeds') {
+      renderFeeds(state.rss.feeds, elements.feeds, i18n)
     }
 
-    if (path === 'posts' || path.startsWith('posts.')) {
-      renderPosts(state.posts, elements.posts, i18n)
+    if (path === 'rss.posts' || path.startsWith('rss.posts.')) {
+      renderPosts(state.rss.posts, elements.posts, i18n)
     }
 
-    if (path.startsWith('form.')) {
-      updateForm(state.form, elements, i18n)
+    if (path.startsWith('form.') || path.startsWith('rss.')) {
+      updateForm(state.form, state.rss, elements, i18n)
     }
 
     if (path === 'ui.modalPostId') {
-      renderModal(state)
+      renderModal(state, modalEl, modal)
     }
   })
+}
 
-const updateForm = (form, elements, i18n) => {
-  elements.input.classList.toggle('is-invalid', Boolean(form.error))
-  elements.feedback.classList.toggle('text-danger', Boolean(form.error))
-  elements.feedback.classList.toggle('text-success', !form.error)
+// FORM
+const updateForm = (form, rss, elements, i18n) => {
+  const submitButton = elements.form.querySelector('button[type="submit"]')
 
+  elements.feedback.classList.remove('text-danger', 'text-success')
+
+  // ошибки формы
   if (form.error) {
+    elements.input.classList.add('is-invalid')
     elements.feedback.textContent = i18n.t(form.error)
+    elements.feedback.classList.add('text-danger')
   }
-  else if (form.status === 'sending') {
+  // ошибки rss
+  else if (rss.error) {
+    elements.input.classList.remove('is-invalid')
+    elements.feedback.textContent = i18n.t(rss.error)
+    elements.feedback.classList.add('text-danger')
+  }
+  // загрузка
+  else if (rss.status === 'loading') {
+    elements.input.classList.remove('is-invalid')
     elements.feedback.textContent = i18n.t('form.status.sending')
-    elements.feedback.classList.remove('text-danger')
     elements.feedback.classList.add('text-success')
   }
+  // успех
   else if (form.status === 'success') {
+    elements.input.classList.remove('is-invalid')
     elements.feedback.textContent = i18n.t('form.status.success')
-    elements.feedback.classList.remove('text-danger')
     elements.feedback.classList.add('text-success')
   }
   else {
+    elements.input.classList.remove('is-invalid')
     elements.feedback.textContent = ''
   }
 
-  elements.form.querySelector('button[type="submit"]').disabled = form.status === 'sending'
+  submitButton.disabled
+    = form.status === 'sending' || rss.status === 'loading'
 }
 
-const renderFeeds = (feeds, container) => {
+// FEEDS
+const renderFeeds = (feeds, container, i18n) => {
   if (!container.querySelector('ul')) {
     container.innerHTML = `
       <div class="card border-0">
         <div class="card-body">
-          <h2 class="card-title h4">Фиды</h2>
+          <h2 class="card-title h4">${i18n.t('ui.feeds')}</h2>
         </div>
         <ul class="list-group border-0 rounded-0"></ul>
       </div>
@@ -73,12 +92,13 @@ const renderFeeds = (feeds, container) => {
   })
 }
 
+// POSTS
 const renderPosts = (posts, container, i18n) => {
   if (!container.querySelector('ul')) {
     container.innerHTML = `
       <div class="card border-0">
         <div class="card-body">
-          <h2 class="card-title h4">Посты</h2>
+          <h2 class="card-title h4">${i18n.t('ui.posts')}</h2>
         </div>
         <ul class="list-group border-0 rounded-0"></ul>
       </div>
@@ -104,7 +124,7 @@ const renderPosts = (posts, container, i18n) => {
     const button = document.createElement('button')
     button.type = 'button'
     button.className = 'btn btn-outline-primary btn-sm'
-    button.textContent = i18n.t('preview')
+    button.textContent = i18n.t('ui.preview')
     button.dataset.id = post.id
 
     li.append(link, button)
@@ -112,16 +132,14 @@ const renderPosts = (posts, container, i18n) => {
   })
 }
 
-const renderModal = (state) => {
-  const post = state.posts.find(p => p.id === state.ui.modalPostId)
+// MODAL
+const renderModal = (state, modalEl, modal) => {
+  const post = state.rss.posts.find(p => p.id === state.ui.modalPostId)
   if (!post) return
-
-  const modalEl = document.getElementById('modal')
 
   modalEl.querySelector('.modal-title').textContent = post.title
   modalEl.querySelector('.modal-body').textContent = post.description
   modalEl.querySelector('.full-article').href = post.link
 
-  const modal = Modal.getOrCreateInstance(modalEl)
   modal.show()
 }

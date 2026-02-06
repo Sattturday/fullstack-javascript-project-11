@@ -12,6 +12,14 @@ export default () =>
               required: 'Не должно быть пустым',
               invalidUrl: 'Ссылка должна быть валидным URL',
               duplicate: 'RSS уже существует',
+            },
+            status: {
+              sending: 'Идет загрузка...',
+              success: 'RSS успешно загружен',
+            },
+          },
+          rss: {
+            errors: {
               network: 'Ошибка сети',
               timeout: 'Превышено время ожидания. Сервер долго не отвечает',
               invalidRss: 'Ресурс не содержит валидный RSS',
@@ -19,12 +27,12 @@ export default () =>
               offline: 'Нет подключения к интернету',
               unknown: 'Неизвестная ошибка',
             },
-            status: {
-              sending: 'Идет загрузка...',
-              success: 'RSS успешно загружен',
-            },
           },
-          preview: 'Просмотр',
+          ui: {
+            feeds: 'Фиды',
+            posts: 'Посты',
+            preview: 'Просмотр',
+          },
         },
       },
     },
